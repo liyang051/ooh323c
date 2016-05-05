@@ -342,6 +342,17 @@ int ooH323EpSetAsGateway()
    return OO_OK;
 }
 
+int ooH323EpSetExtH245Address(const char* ip)
+{
+   if(ip)
+   {
+      strcpy(gH323ep.extH245IP, ip);
+      OOTRACEINFO2("ext H245 IP address is set to %s\n", ip);
+   }
+
+   return OO_OK;
+}
+
 int ooH323EpSetLocalAddress(const char* localip, int listenport)
 {
    if(localip)

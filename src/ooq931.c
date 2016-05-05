@@ -1808,8 +1808,14 @@ int ooAcceptCall(OOH323CallData *call)
                      "(%s, %s)\n", call->callType, call->callToken);
          return OO_FAILED;
       }
-      ooSocketConvertIpToNwAddr
-        (call->localIP, h245IpAddr->ip.data, sizeof(h245IpAddr->ip.data));
+      if (!strcmp(gH323ep.extH245IP, ""))
+      {
+         ooSocketConvertIpToNwAddr
+            (call->localIP, h245IpAddr->ip.data, sizeof(h245IpAddr->ip.data));
+      } else {
+          ooSocketConvertIpToNwAddr
+            (gH323ep.extH245IP, h245IpAddr->ip.data, sizeof(h245IpAddr->ip.data));
+      }
       h245IpAddr->ip.numocts=4;
       h245IpAddr->port = *(call->h245listenport);
       connect->h245Address.u.ipAddress = h245IpAddr;
