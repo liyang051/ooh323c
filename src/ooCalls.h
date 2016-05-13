@@ -188,6 +188,7 @@ typedef struct OOH323CallData {
    void                 *usrData; /*!<User can set this to user specific data*/
    struct OOH323CallData* next;
    struct OOH323CallData* prev;
+   char *productID;
 } OOH323CallData;
 
 #define ooCallData OOH323CallData

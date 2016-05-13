@@ -137,6 +137,7 @@ int ooOnReceivedSetup(OOH323CallData *call, Q931Message *q931Msg)
    H225TransportAddress_ipAddress_ip *ip = NULL;
    Q931InformationElement* pDisplayIE=NULL;
    OOAliases *pAlias=NULL;
+   H225VendorIdentifier *vendor;
 
    call->callReference = q931Msg->callReference;
 
@@ -153,6 +154,15 @@ int ooOnReceivedSetup(OOH323CallData *call, Q931Message *q931Msg)
                   "%s\n", call->callType, call->callToken);
       return OO_FAILED;
    }
+
+   vendor = &setup->sourceInfo.vendor;
+   if (vendor->m.productIdPresent == 1) {
+      call->productID = (char*) memAllocZ
+              (call->pctxt, vendor->productId.numocts + 1);
+      strncpy(call->productID, (char *)vendor->productId.data,
+              vendor->productId.numocts);
+   }
+
    memcpy(call->callIdentifier.guid.data, setup->callIdentifier.guid.data,
           setup->callIdentifier.guid.numocts);
    call->callIdentifier.guid.numocts = setup->callIdentifier.guid.numocts;
