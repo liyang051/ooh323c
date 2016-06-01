@@ -123,6 +123,7 @@ int ooH323EpInitialize
    gH323ep.callingPartyNumber[0]='\0';
    gH323ep.callMode = callMode;
    gH323ep.isGateway = FALSE;
+   gH323ep.delayResponseOLC = FALSE;
    gH323ep.bearercap = Q931TransferUnrestrictedDigital;
 
    dListInit(&g_TimerList);/* This is for test application chansetup only*/
@@ -339,6 +340,12 @@ int ooH323EpSetBearerCap (const char* configText)
 int ooH323EpSetAsGateway()
 {
    gH323ep.isGateway = TRUE;
+   return OO_OK;
+}
+
+int ooH323EpEnableDelayResponseOLC()
+{
+   gH323ep.delayResponseOLC = TRUE;
    return OO_OK;
 }
 

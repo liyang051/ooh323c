@@ -156,6 +156,7 @@ typedef struct OOH323EndPoint {
     */
    enum Q931InformationTransferCapability bearercap;
    char extH245IP[20];
+   OOBOOL delayResponseOLC;
 } OOH323EndPoint;
 
 #define ooEndPoint OOH323EndPoint
@@ -210,6 +211,7 @@ EXTERN int ooH323EpSetAsGateway();
  *
  * @return               OO_OK, on success. OO_FAILED, on failure.
  */
+EXTERN int ooH323EpEnableDelayResponseOLC();
 EXTERN int ooH323EpSetExtH245Address(const char* ip);
 EXTERN int ooH323EpSetLocalAddress(const char* localip, int listenport);
 

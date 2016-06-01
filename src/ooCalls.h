@@ -189,6 +189,8 @@ typedef struct OOH323CallData {
    struct OOH323CallData* next;
    struct OOH323CallData* prev;
    char *productID;
+   void *remoteAudioOLCMsg;
+   void *remoteVideoOLCMsg;
 } OOH323CallData;
 
 #define ooCallData OOH323CallData
