@@ -191,6 +191,8 @@ typedef struct OOH323CallData {
    char *productID;
    void *remoteAudioOLCMsg;
    void *remoteVideoOLCMsg;
+   ooH323EpCapability *negVideoCap;
+   ooH323EpCapability *negAudioCap;
 } OOH323CallData;
 
 #define ooCallData OOH323CallData

@@ -2115,7 +2115,7 @@ int ooOnReceivedRoundTripDelayRequest(OOH323CallData *call,
    }
 
    ooFreeH245Message(call, ph245msg);
-  
+
    return ret;
 }
 
@@ -3069,6 +3069,14 @@ int ooOpenLogicalChannel(OOH323CallData *call, enum OOCapType capType )
          return OO_FAILED;
       }
 
+   }
+
+   if (capType == OO_CAP_TYPE_AUDIO && call->negAudioCap) {
+      epCap = call->negAudioCap;
+   }
+
+   if (capType == OO_CAP_TYPE_VIDEO && call->negVideoCap) {
+      epCap = call->negVideoCap;
    }
 
    switch(epCap->cap)
