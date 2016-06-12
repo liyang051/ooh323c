@@ -123,7 +123,8 @@ int ooH323EpInitialize
    gH323ep.callingPartyNumber[0]='\0';
    gH323ep.callMode = callMode;
    gH323ep.isGateway = FALSE;
-   gH323ep.delayResponseOLC = FALSE;
+   gH323ep.delayResponseAudioOLC = FALSE;
+   gH323ep.delayResponseVideoOLC = FALSE;
    gH323ep.bearercap = Q931TransferUnrestrictedDigital;
 
    dListInit(&g_TimerList);/* This is for test application chansetup only*/
@@ -343,9 +344,15 @@ int ooH323EpSetAsGateway()
    return OO_OK;
 }
 
-int ooH323EpEnableDelayResponseOLC()
+int ooH323EpEnableDelayResponseAudioOLC()
 {
-   gH323ep.delayResponseOLC = TRUE;
+   gH323ep.delayResponseAudioOLC = TRUE;
+   return OO_OK;
+}
+
+int ooH323EpEnableDelayResponseVideoOLC()
+{
+   gH323ep.delayResponseVideoOLC = TRUE;
    return OO_OK;
 }
 
