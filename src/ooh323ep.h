@@ -158,6 +158,7 @@ typedef struct OOH323EndPoint {
    char extH245IP[20];
    OOBOOL delayResponseAudioOLC;
    OOBOOL delayResponseVideoOLC;
+   OOBOOL customCodecNegotiation;
 } OOH323EndPoint;
 
 #define ooEndPoint OOH323EndPoint
@@ -214,6 +215,7 @@ EXTERN int ooH323EpSetAsGateway();
  */
 EXTERN int ooH323EpEnableDelayResponseVideoOLC();
 EXTERN int ooH323EpEnableDelayResponseAudioOLC();
+EXTERN int ooH323EpEnableCustomCodecNegotiation();
 EXTERN int ooH323EpSetExtH245Address(const char* ip);
 EXTERN int ooH323EpSetLocalAddress(const char* localip, int listenport);
 

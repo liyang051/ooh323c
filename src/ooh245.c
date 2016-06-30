@@ -3063,11 +3063,11 @@ int ooOpenLogicalChannel(OOH323CallData *call, enum OOCapType capType )
 
    }
 
-   if (capType == OO_CAP_TYPE_AUDIO && call->negAudioCap) {
+   if (gH323ep.customCodecNegotiation == TRUE && capType == OO_CAP_TYPE_AUDIO && call->negAudioCap) {
       epCap = call->negAudioCap;
    }
 
-   if (capType == OO_CAP_TYPE_VIDEO && call->negVideoCap) {
+   if (gH323ep.customCodecNegotiation == TRUE && capType == OO_CAP_TYPE_VIDEO && call->negVideoCap) {
       epCap = call->negVideoCap;
    }
 

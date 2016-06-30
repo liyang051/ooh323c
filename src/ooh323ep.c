@@ -125,6 +125,7 @@ int ooH323EpInitialize
    gH323ep.isGateway = FALSE;
    gH323ep.delayResponseAudioOLC = FALSE;
    gH323ep.delayResponseVideoOLC = FALSE;
+   gH323ep.customCodecNegotiation = FALSE;
    gH323ep.bearercap = Q931TransferUnrestrictedDigital;
 
    dListInit(&g_TimerList);/* This is for test application chansetup only*/
@@ -353,6 +354,12 @@ int ooH323EpEnableDelayResponseAudioOLC()
 int ooH323EpEnableDelayResponseVideoOLC()
 {
    gH323ep.delayResponseVideoOLC = TRUE;
+   return OO_OK;
+}
+
+int ooH323EpEnableCustomCodecNegotiation()
+{
+   gH323ep.customCodecNegotiation = TRUE;
    return OO_OK;
 }
 
