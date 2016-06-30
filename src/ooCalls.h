@@ -193,6 +193,7 @@ typedef struct OOH323CallData {
    void *remoteVideoOLCMsg;
    ooH323EpCapability *negVideoCap;
    ooH323EpCapability *negAudioCap;
+   OOCTXT               *pctxtOLC;
 } OOH323CallData;
 
 #define ooCallData OOH323CallData

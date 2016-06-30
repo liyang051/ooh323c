@@ -33,6 +33,7 @@ OOH323CallData* ooCreateCall(char* type, char*callToken, void *usrData)
 {
    OOH323CallData *call=NULL;
    OOCTXT *pctxt=NULL;
+   OOCTXT *pctxtOLC=NULL;
 
    pctxt = newContext();
    if(!pctxt)
@@ -40,6 +41,18 @@ OOH323CallData* ooCreateCall(char* type, char*callToken, void *usrData)
       OOTRACEERR1("ERROR:Failed to create OOCTXT for new call\n");
       return NULL;
    }
+
+   if (gH323ep.delayResponseVideoOLC == TRUE || gH323ep.delayResponseAudioOLC == TRUE) {
+     pctxtOLC = newContext();
+
+     if(!pctxtOLC)
+     {
+        freeContext(pctxt);
+        OOTRACEERR1("ERROR:Failed to create OOCTXT for new call\n");
+        return NULL;
+     }
+   }
+
    call = (OOH323CallData*)memAlloc(pctxt, sizeof(OOH323CallData));
    if(!call)
    {
@@ -48,6 +61,7 @@ OOH323CallData* ooCreateCall(char* type, char*callToken, void *usrData)
    }
    /*   memset(call, 0, sizeof(OOH323CallData));*/
    call->pctxt = pctxt;
+   call->pctxtOLC = pctxtOLC;
    call->callMode = gH323ep.callMode;
    sprintf(call->callToken, "%s", callToken);
    sprintf(call->callType, "%s", type);
@@ -326,6 +340,10 @@ int ooCleanCall(OOH323CallData *call)
    pctxt = call->pctxt;
    freeContext(pctxt);
    ASN1CRTFREE0(pctxt);
+   if (call->pctxtOLC) {
+      freeContext(call->pctxtOLC);
+      ASN1CRTFREE0(call->pctxtOLC);
+   }
    return OO_OK;
 }
 

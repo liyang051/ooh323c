@@ -1071,17 +1071,9 @@ int ooHandleOpenLogicalChannel(OOH323CallData* call,
              T_H245OpenLogicalChannelReject_cause_dataTypeNotSupported);
       break;
    case T_H245DataType_videoData:
-      if (gH323ep.delayResponseVideoOLC == TRUE) {
-         call->remoteVideoOLCMsg = (H245OpenLogicalChannel *)memAllocZ(call->pctxt, sizeof(H245OpenLogicalChannel));
-         memcpy(call->remoteVideoOLCMsg, olc, sizeof(H245OpenLogicalChannel));
-         break;
-      }
+      if (gH323ep.delayResponseVideoOLC == TRUE && call->remoteVideoOLCMsg) break;
    case T_H245DataType_audioData:
-      if (gH323ep.delayResponseAudioOLC == TRUE) {
-         call->remoteAudioOLCMsg = (H245OpenLogicalChannel *)memAllocZ(call->pctxt, sizeof(H245OpenLogicalChannel));
-         memcpy(call->remoteAudioOLCMsg, olc, sizeof(H245OpenLogicalChannel));
-         break;
-      }
+      if (gH323ep.delayResponseAudioOLC == TRUE && call->remoteAudioOLCMsg) break;
       ooHandleOpenLogicalChannel_helper(call, olc);
       break;
    case T_H245DataType_data:

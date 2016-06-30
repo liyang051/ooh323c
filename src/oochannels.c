@@ -1118,6 +1118,33 @@ int ooH245Receive(OOH323CallData *call)
       ooFreeH245Message(call, pmsg);
       return OO_FAILED;
    }
+
+   if ((gH323ep.delayResponseVideoOLC == TRUE || gH323ep.delayResponseAudioOLC == TRUE)
+       && pmsg->h245Msg.t == T_H245MultimediaSystemControlMessage_request
+       && pmsg->h245Msg.u.request->t == T_H245RequestMessage_openLogicalChannel) {
+
+      H245OpenLogicalChannel_forwardLogicalChannelParameters *flcp =
+         &(pmsg->h245Msg.u.request->u.openLogicalChannel->forwardLogicalChannelParameters);
+
+      H245Message *npmsg = (H245Message*)memAlloc(call->pctxtOLC, sizeof(H245Message));
+
+      setPERBuffer(call->pctxtOLC, pmsgbuf, total, TRUE);
+      ret = asn1PD_H245MultimediaSystemControlMessage(call->pctxtOLC, &(npmsg->h245Msg));
+
+      if(ret == ASN_OK) {
+         if (flcp->dataType.t == T_H245DataType_videoData && gH323ep.delayResponseVideoOLC == TRUE) {
+            call->remoteVideoOLCMsg = npmsg->h245Msg.u.request->u.openLogicalChannel;
+         }
+
+         if (flcp->dataType.t == T_H245DataType_audioData && gH323ep.delayResponseAudioOLC == TRUE) {
+            call->remoteAudioOLCMsg = npmsg->h245Msg.u.request->u.openLogicalChannel;
+         }
+      } else {
+         OOTRACEERR3("Error decoding H245 message for OLC (%s, %s)\n",
+                     call->callType, call->callToken);
+      }
+   }
+
    finishPrint();
    removeEventHandler(pctxt);
    memFreePtr (pctxt, pmsgbuf);
