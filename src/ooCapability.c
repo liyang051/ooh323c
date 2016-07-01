@@ -329,7 +329,7 @@ int ooCapabilityAddH263VideoCapability_helper(ooCallData *call,
    return OO_OK;
 }
 
-/* Used for g711 ulaw/alaw, g728, g729 and g7231 */
+/* Used for g711 ulaw/alaw, g728, g729, g722, and g7231 */
 int ooCapabilityAddSimpleCapability
    (OOH323CallData *call, int cap, int txframes,
     int rxframes, OOBOOL silenceSuppression, int dir,
@@ -650,6 +650,7 @@ struct H245AudioCapability* ooCapabilityCreateAudioCapability
    case OO_G728:
    case OO_G729:
    case OO_G729A:
+   case OO_G722_64k:
    case OO_G7231:
      return ooCapabilityCreateSimpleCapability(epCap, pctxt, dir);
    case OO_GSMFULLRATE:
@@ -999,6 +1000,13 @@ struct H245AudioCapability* ooCapabilityCreateSimpleCapability
       else
          pAudio->u.g729AnnexA = params->txframes;
       return pAudio;
+   case OO_G722_64k:
+      pAudio->t = T_H245AudioCapability_g722_64k;
+      if(dir & OORX)
+         pAudio->u.g722_64k = params->rxframes;
+      else
+         pAudio->u.g722_64k = params->txframes;
+      return pAudio;
    case OO_G7231:
       pAudio->t = T_H245AudioCapability_g7231;
       pAudio->u.g7231 = (H245AudioCapability_g7231*)memAlloc(pctxt,
@@ -1065,6 +1073,10 @@ ASN1BOOL ooCapabilityCheckCompatibility_Simple
    case T_H245AudioCapability_g729AnnexA:
       cap = OO_G729A;
       noofframes = audioCap->u.g729AnnexA;
+      break;
+   case T_H245AudioCapability_g722_64k:
+      cap = OO_G722_64k;
+      noofframes = audioCap->u.g722_64k;
       break;
    case T_H245AudioCapability_g7231:
      cap = OO_G7231;
@@ -1333,6 +1345,7 @@ OOBOOL ooCapabilityCheckCompatibility_Audio
    case T_H245AudioCapability_g728:
    case T_H245AudioCapability_g729:
    case T_H245AudioCapability_g729AnnexA:
+   case T_H245AudioCapability_g722_64k:
    case T_H245AudioCapability_g7231:
       return ooCapabilityCheckCompatibility_Simple(call, epCap, audioCap, dir);
    case T_H245AudioCapability_gsmFullRate:
@@ -1570,7 +1583,7 @@ ooH323EpCapability* ooIsAudioDataTypeGSMSupported
 
 }
 
-/* used for g711 ulaw/alaw, g728, g729, g729a, g7231 */
+/* used for g711 ulaw/alaw, g728, g729, g729a, g722, g7231 */
 ooH323EpCapability* ooIsAudioDataTypeSimpleSupported
    (OOH323CallData *call, H245AudioCapability* audioCap, int dir)
 {
@@ -1619,6 +1632,11 @@ ooH323EpCapability* ooIsAudioDataTypeSimpleSupported
       case T_H245AudioCapability_g729AnnexA:
          framesPerPkt = audioCap->u.g729AnnexA;
          cap = OO_G729A;
+         break;
+
+      case T_H245AudioCapability_g722_64k:
+         framesPerPkt = audioCap->u.g722_64k;
+         cap = OO_G722_64k;
          break;
 
       case T_H245AudioCapability_g7231:
@@ -1754,6 +1772,7 @@ ooH323EpCapability* ooIsAudioDataTypeSupported
       case T_H245AudioCapability_g728:
       case T_H245AudioCapability_g729:
       case T_H245AudioCapability_g729AnnexA:
+      case T_H245AudioCapability_g722_64k:
       case T_H245AudioCapability_g7231:
          return ooIsAudioDataTypeSimpleSupported(call, audioCap, dir);
       case T_H245AudioCapability_gsmFullRate:
@@ -2398,6 +2417,16 @@ int ooAddRemoteAudioCapability(OOH323CallData *call,
          rxframes = audioCap->u.g729AnnexA;
       }
       return ooCapabilityAddSimpleCapability(call, OO_G729A, txframes,
+                           rxframes, FALSE, dir, NULL, NULL, NULL, NULL, TRUE);
+
+   case T_H245AudioCapability_g722_64k:
+      if(dir&OOTX) txframes = audioCap->u.g722_64k;
+      else if(dir&OORX) rxframes = audioCap->u.g722_64k;
+      else{
+         txframes = audioCap->u.g722_64k;
+         rxframes = audioCap->u.g722_64k;
+      }
+      return ooCapabilityAddSimpleCapability(call, OO_G722_64k, txframes,
                            rxframes, FALSE, dir, NULL, NULL, NULL, NULL, TRUE);
 
    case T_H245AudioCapability_g7231:

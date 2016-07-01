@@ -543,6 +543,18 @@ int ooCallAddG729Capability(OOH323CallData *call, int cap, int txframes,
                           stopReceiveChannel, stopTransmitChannel, FALSE);
 }
 
+int ooCallAddG722Capability(OOH323CallData *call, int cap, int txframes,
+                            int rxframes, int dir,
+                            cb_StartReceiveChannel startReceiveChannel,
+                            cb_StartTransmitChannel startTransmitChannel,
+                            cb_StopReceiveChannel stopReceiveChannel,
+                            cb_StopTransmitChannel stopTransmitChannel)
+{
+   return ooCapabilityAddSimpleCapability(call, cap, txframes, rxframes, FALSE,
+                          dir, startReceiveChannel, startTransmitChannel,
+                          stopReceiveChannel, stopTransmitChannel, FALSE);
+}
+
 /*
 int ooCallAddG726Capability(OOH323CallData *call, int cap, int txframes,
                             int rxframes, int dir,

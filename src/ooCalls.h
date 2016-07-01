@@ -540,6 +540,13 @@ EXTERN int ooCallAddG729Capability(OOH323CallData *call, int cap, int txframes,
                             cb_StopReceiveChannel stopReceiveChannel,
                             cb_StopTransmitChannel stopTransmitChannel);
 
+EXTERN int ooCallAddG722Capability(OOH323CallData *call, int cap, int txframes,
+                            int rxframes, int dir,
+                            cb_StartReceiveChannel startReceiveChannel,
+                            cb_StartTransmitChannel startTransmitChannel,
+                            cb_StopReceiveChannel stopReceiveChannel,
+                            cb_StopTransmitChannel stopTransmitChannel);
+
 /**
  * This function is used to add G711 capability for the call. The
  * "ooCallAdd...Capability" functions allow to override the global endpoint

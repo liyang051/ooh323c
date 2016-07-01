@@ -3083,6 +3083,7 @@ int ooOpenLogicalChannel(OOH323CallData *call, enum OOCapType capType )
    case OO_G729A:
    case OO_G7231:
    case OO_GSMFULLRATE:
+   case OO_G722_64k:
    case OO_H263VIDEO:
    case OO_H264VIDEO:
       ooOpenChannel(call, epCap);
