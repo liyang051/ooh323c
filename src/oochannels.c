@@ -846,6 +846,7 @@ int ooH2250Receive(OOH323CallData *call)
    OOCTXT *pctxt = &gH323ep.msgctxt;
    struct timeval timeout;
    fd_set readfds;
+   int decode_failed = 0;
 
    /* First read just TPKT header which is four bytes */
    recvLen = ooSocketRecv (call->pH225Channel->sock, msglenbuf, 4);
@@ -960,6 +961,7 @@ int ooH2250Receive(OOH323CallData *call)
    if(ret != OO_OK) {
       OOTRACEERR3("Error:Failed to decode received H.2250 message. (%s, %s)\n",
                    call->callType, call->callToken);
+      decode_failed = 1;
    }
    OOTRACEDBGC3("Decoded Q931 message (%s, %s)\n", call->callType,
                 call->callToken);
@@ -970,6 +972,8 @@ int ooH2250Receive(OOH323CallData *call)
    }
 
    memFreePtr (pctxt, pmsgbuf);
+
+   if (decode_failed) return OO_OK;
 
    return ret;
 }
